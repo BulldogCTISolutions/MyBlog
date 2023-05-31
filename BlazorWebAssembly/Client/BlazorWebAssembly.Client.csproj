@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	<NoWarn>1036,1701;1702;9057;</NoWarn>
+	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<ServerGarbageCollection>true</ServerGarbageCollection>
+	<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\.editorConfig" Link=".editorConfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.5" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\BlazorWebAssembly.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+</Project>

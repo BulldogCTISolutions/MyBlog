@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	<NoWarn>1036,1701;1702;9057;</NoWarn>
+	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<None Include="..\..\.editorConfig" Link=".editorConfig" />
+  </ItemGroup>
+
+</Project>
