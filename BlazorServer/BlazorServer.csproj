@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlazorWebAssembly\Common\BlazorWebAssembly.Common.csproj" />
+    <ProjectReference Include="..\Components\Components.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>
 

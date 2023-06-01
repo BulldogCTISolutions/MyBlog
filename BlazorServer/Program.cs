@@ -1,13 +1,12 @@
 using System.Net;
 
-using BlazorServer.Services;
-
 using Data;
 using Data.Models.Interfaces;
 
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace BlazorServer;
+
 public static class Program
 {
     public static void Main( string[] args )
@@ -40,7 +39,6 @@ public static class Program
         // Add services to the container.
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
-        _ = builder.Services.AddSingleton<WeatherForecastService>();
 
         WebApplication app = builder.Build();
 
