@@ -1,9 +1,25 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Index</PageTitle>
+@using Data.Models.Models
+@using Data.Models.Interfaces
 
-<h1>Hello, world!</h1>
+@inject IBlogApi _api
 
-Welcome to your new app.
+<ul>
+    @foreach( BlogPost p in posts )
+    {
+        <li>@p.Title</li>
+    }
+</ul>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code
+{
+    protected List<BlogPost> posts = new List<BlogPost>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = (await _api.GetBlogPostsAsync(10, 0).ConfigureAwait(false))!;   // using null forgivness here
+        await base.OnInitializedAsync();
+    }
+}

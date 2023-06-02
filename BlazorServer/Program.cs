@@ -1,9 +1,5 @@
-using System.Net;
-
 using Data;
 using Data.Models.Interfaces;
-
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace BlazorServer;
 
@@ -13,14 +9,14 @@ public static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 
-        //	Accept only HTTP/3 connections
-        _ = builder.WebHost.ConfigureKestrel( ( WebHostBuilderContext context, KestrelServerOptions options ) =>
-                options.Listen( IPAddress.Any, 7192, listenOptions =>
-            {
-                // Use HTTP/3
-                listenOptions.Protocols = HttpProtocols.Http3;
-                _ = listenOptions.UseHttps();
-            } ) );
+        ////	Accept only HTTP/3 connections
+        //_ = builder.WebHost.ConfigureKestrel( ( WebHostBuilderContext context, KestrelServerOptions options ) =>
+        //        options.Listen( IPAddress.Any, 7192, listenOptions =>
+        //    {
+        //        // Use HTTP/3
+        //        listenOptions.Protocols = HttpProtocols.Http3;
+        //        _ = listenOptions.UseHttps();
+        //    } ) );
 
         //	Add API for Data
         //	This is a good place to load from KeyVault or database.
@@ -28,7 +24,7 @@ public static class Program
                    .AddOptions<BlogApiJsonDirectAccessSetting>()
                    .Configure( options =>
                    {
-                       options.DataPath = @"..\..\..\Data\";
+                       options.DataPath = @"..\Data\";
                        options.BlogPostsFolder = @"BlogPosts";
                        options.CategoriesFolder = @"Categories";
                        options.TagsFolder = @"Tags";
