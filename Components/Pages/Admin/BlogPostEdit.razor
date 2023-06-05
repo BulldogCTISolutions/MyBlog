@@ -10,7 +10,7 @@
 <EditForm Model="Post" OnValidSubmit="SavePost">
     <DataAnnotationsValidator />
     <CustomCssClassProvider TProviderType="BootstrapFieldCssClassProvider" />
-    @*<BlogNavigationLock @ref="NavigationLock" />*@
+    <BlogNavigationLock @ref="NavigationLock" />
     <InputText @bind-Value="Post.Title" />
     <ValidationMessage For="()=>Post.Title" />
     <InputDate @bind-Value="Post.PublishDate" />
@@ -55,15 +55,13 @@
     private List<Tag> Tags { get; set; } = new List<Tag>();
     private string? selectedCategory = null;
     private string markDownAsHTML { get; set; } = string.Empty;
-    //private BlogNavigationLock? NavigationLock { get; set; }
+    private BlogNavigationLock? NavigationLock { get; set; }
 
-    private MarkdownPipeline pipeline = default!;
+    private MarkdownPipeline _pipeline = default!;
 
     protected override Task OnInitializedAsync()
     {
-        this.pipeline = new MarkdownPipelineBuilder()
-                            .UseEmojiAndSmiley()
-                            .Build();
+        this._pipeline = new MarkdownPipelineBuilder().UseEmojiAndSmiley().Build();
         return base.OnInitializedAsync();
     }
 
@@ -71,7 +69,7 @@
     {
         if( Id is not null )
         {
-            var p = await _api.GetBlogPostAsync( Id );
+            var p = await _api.GetBlogPostAsync( Id ).ConfigureAwait( false );
             if( p is not null )
             {
                 Post = p;
@@ -82,14 +80,14 @@
                 UpdateHTML();
             }
         }
-        Categories = ( await _api.GetCategoriesAsync() ) ?? new List<Category>();
-        Tags = ( await _api.GetTagsAsync() ) ?? new List<Tag>();
+        Categories = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new List<Category>();
+        Tags = ( await _api.GetTagsAsync().ConfigureAwait( false ) ) ?? new List<Tag>();
         base.OnParametersSet();
     }
 
     protected void UpdateHTML()
     {
-        markDownAsHTML = Markdig.Markdown.ToHtml( Post.Text, pipeline );
+        markDownAsHTML = Markdig.Markdown.ToHtml( Post.Text, this._pipeline );
     }
 
     private bool hasTag( Tag tag )
@@ -107,8 +105,8 @@
                 Post.Category = category;
             }
         }
-        await _api.SaveBlogPostAsync( Post );
-        //NavigationLock?.CurrentEditContext.MarkAsUnmodified();
+        await _api.SaveBlogPostAsync( Post ).ConfigureAwait( false );
+        NavigationLock?.CurrentEditContext.MarkAsUnmodified();
         _manager.NavigateTo( "/admin/blogposts" );
     }
 }

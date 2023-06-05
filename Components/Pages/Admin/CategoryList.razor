@@ -33,7 +33,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Items = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new();
+        Items = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new List<Category>();
         await base.OnInitializedAsync();
     }
 
