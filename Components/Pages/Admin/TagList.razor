@@ -1,10 +1,10 @@
-@page "/admin/categories"
+@page "/admin/tags"
 
 @using Components.RazorComponents
 
 @inject IBlogApi _api
 
-<h3>Categories</h3>
+<h3>Tags</h3>
 
 <EditForm OnValidSubmit="Save" Model="Item">
     <DataAnnotationsValidator />
@@ -14,10 +14,10 @@
     <button class="btn btn-success" type="submit">Save</button>
 </EditForm>
 
-<ItemList Items="Items" DeleteEvent="@Delete" SelectEvent="@Select" ItemType="Category">
+<ItemList Items="Items" DeleteEvent="@Delete" SelectEvent="@Select" ItemType="Tag">
     <ItemTemplate>
         @{
-            var item = context as Category;
+            var item = context as Tag;
             if( item != null )
             {
                 @item.Name
@@ -28,21 +28,21 @@
 
 @code
 {
-    private List<Category> Items { get; set; } = new List<Category>();
-    public Category Item { get; set; } = new Category();
+    private List<Tag> Items { get; set; } = new List<Tag>();
+    public Tag Item { get; set; } = new Tag();
 
     protected async override Task OnInitializedAsync()
     {
-        Items = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new();
+        Items = ( await _api.GetTagsAsync().ConfigureAwait( false ) ) ?? new();
         await base.OnInitializedAsync();
     }
 
-    private async Task Delete( Category category )
+    private async Task Delete( Tag tag )
     {
         try
         {
-            await _api.DeleteCategoryAsync( category.Id! ).ConfigureAwait( false );
-            Items.Remove( category );
+            await _api.DeleteTagAsync( tag.Id! ).ConfigureAwait( false );
+            Items.Remove( tag );
         }
         catch { }
     }
@@ -51,21 +51,21 @@
     {
         try
         {
-            await _api.SaveCategoryAsync( Item ).ConfigureAwait( false );
+            await _api.SaveTagAsync( Item ).ConfigureAwait( false );
             if( Items.Contains( Item ) == false )
             {
                 Items.Add( Item );
             }
-            Item = new Category();
+            Item = new Tag();
         }
         catch { }
     }
 
-    private Task Select( Category category )
+    private Task Select( Tag tag )
     {
         try
         {
-            Item = category;
+            Item = tag;
         }
         catch { }
         return Task.CompletedTask;
