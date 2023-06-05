@@ -1,0 +1,114 @@
+@page "/admin/blogposts/new"
+@page "/admin/blogposts/{Id}"
+
+@using Components.RazorComponents
+@using Markdig
+
+@inject IBlogApi _api
+@inject NavigationManager _manager
+
+<EditForm Model="Post" OnValidSubmit="SavePost">
+    <DataAnnotationsValidator />
+    <CustomCssClassProvider TProviderType="BootstrapFieldCssClassProvider" />
+    @*<BlogNavigationLock @ref="NavigationLock" />*@
+    <InputText @bind-Value="Post.Title" />
+    <ValidationMessage For="()=>Post.Title" />
+    <InputDate @bind-Value="Post.PublishDate" />
+    <ValidationMessage For="()=>Post.PublishDate" />
+    <InputSelect @bind-Value="selectedCategory">
+        <option value="0" disabled>None selected</option>
+        @foreach( Category category in Categories )
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </InputSelect>
+    <ul>
+        @foreach( Tag tag in Tags )
+        {
+            <li>
+                @tag.Name
+                @if( Post.Tags.Any( t => t.Id == tag.Id ) )
+                {
+                    <button type="button" @onclick="@(() => {Post.Tags.Remove(Post.Tags.Single(t=>t.Id==tag.Id)); })">Remove</button>
+                }
+                else
+                {
+                    <button type="button" @onclick="@(()=> { Post.Tags.Add(tag); })">Add</button>
+                }
+            </li>
+        }
+    </ul>
+    <InputTextAreaOnInput @bind-Value="Post.Text" @onkeyup="UpdateHTML" />
+    <ValidationMessage For="()=>Post.Text" />
+    <button type="submit" class="btn btn-success">Save</button>
+</EditForm>
+
+@((MarkupString)markDownAsHTML)
+
+@code
+{
+    [Parameter]
+    public string? Id { get; set; }
+
+    private BlogPost Post { get; set; } = new BlogPost();
+    private List<Category> Categories { get; set; } = new List<Category>();
+    private List<Tag> Tags { get; set; } = new List<Tag>();
+    private string? selectedCategory = null;
+    private string markDownAsHTML { get; set; } = string.Empty;
+    //private BlogNavigationLock? NavigationLock { get; set; }
+
+    private MarkdownPipeline pipeline = default!;
+
+    protected override Task OnInitializedAsync()
+    {
+        this.pipeline = new MarkdownPipelineBuilder()
+                            .UseEmojiAndSmiley()
+                            .Build();
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if( Id is not null )
+        {
+            var p = await _api.GetBlogPostAsync( Id );
+            if( p is not null )
+            {
+                Post = p;
+                if( Post.Category is not null )
+                {
+                    selectedCategory = Post.Category.Id;
+                }
+                UpdateHTML();
+            }
+        }
+        Categories = ( await _api.GetCategoriesAsync() ) ?? new List<Category>();
+        Tags = ( await _api.GetTagsAsync() ) ?? new List<Tag>();
+        base.OnParametersSet();
+    }
+
+    protected void UpdateHTML()
+    {
+        markDownAsHTML = Markdig.Markdown.ToHtml( Post.Text, pipeline );
+    }
+
+    private bool hasTag( Tag tag )
+    {
+        return Post.Tags.Contains( tag );
+    }
+
+    private async Task SavePost()
+    {
+        if( ( string.IsNullOrEmpty( selectedCategory ) == false ) && ( Categories is not null ) )
+        {
+            Category? category = Categories.FirstOrDefault( c => c.Id == selectedCategory );
+            if( category is not null )
+            {
+                Post.Category = category;
+            }
+        }
+        await _api.SaveBlogPostAsync( Post );
+        //NavigationLock?.CurrentEditContext.MarkAsUnmodified();
+        _manager.NavigateTo( "/admin/blogposts" );
+    }
+}
