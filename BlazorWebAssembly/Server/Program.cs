@@ -1,6 +1,7 @@
-using System.Net;
+using BlazorWebAssembly.Server.Endpoints;
 
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Data;
+using Data.Models.Interfaces;
 
 namespace BlazorWebAssembly.Server;
 public static class Program
@@ -9,17 +10,29 @@ public static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 
-        //	Accept only HTTP/3 connections
-        _ = builder.WebHost.ConfigureKestrel( ( WebHostBuilderContext context, KestrelServerOptions options ) =>
-                options.Listen( IPAddress.Any, 7192, listenOptions =>
-                {
-                    // Use HTTP/3
-                    listenOptions.Protocols = HttpProtocols.Http3;
-                    _ = listenOptions.UseHttps();
-                } ) );
+        ////	Accept only HTTP/3 connections
+        //_ = builder.WebHost.ConfigureKestrel( ( WebHostBuilderContext context, KestrelServerOptions options ) =>
+        //        options.Listen( IPAddress.Any, 7192, listenOptions =>
+        //        {
+        //            // Use HTTP/3
+        //            listenOptions.Protocols = HttpProtocols.Http3;
+        //            _ = listenOptions.UseHttps();
+        //        } ) );
+
+        //	Add API for Data
+        //	This is a good place to load from KeyVault or database.
+        _ = builder.Services
+                   .AddOptions<BlogApiJsonDirectAccessSetting>()
+                   .Configure( options =>
+                   {
+                       options.DataPath = @"..\..\Data\";
+                       options.BlogPostsFolder = @"BlogPosts";
+                       options.CategoriesFolder = @"Categories";
+                       options.TagsFolder = @"Tags";
+                   } );
+        _ = builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
 
         // Add services to the container.
-
         _ = builder.Services.AddControllersWithViews();
         _ = builder.Services.AddRazorPages();
 
@@ -43,7 +56,9 @@ public static class Program
         _ = app.UseStaticFiles();
 
         _ = app.UseRouting();
-
+        app.MapBlogPostApi();
+        app.MapCategoryApi();
+        app.MapTagApi();
 
         _ = app.MapRazorPages();
         _ = app.MapControllers();

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\Data.csproj" />
     <ProjectReference Include="..\Client\BlazorWebAssembly.Client.csproj" />
     <ProjectReference Include="..\Common\BlazorWebAssembly.Common.csproj" />
   </ItemGroup>
