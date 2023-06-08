@@ -1,5 +1,7 @@
 using Auth0.AspNetCore.Authentication;
 
+using Components.RazorComponents;
+
 using Data;
 using Data.Models.Interfaces;
 
@@ -61,6 +63,7 @@ public static class Program
         // Add services to the container.
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
+        _ = builder.Services.AddTransient<ILoginStatus, LoginStatus>();
 
         WebApplication app = builder.Build();
 
