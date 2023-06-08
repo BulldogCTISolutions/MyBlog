@@ -11,10 +11,16 @@
 	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 	<AnalysisLevel>latest</AnalysisLevel>
 	<ServerGarbageCollection>true</ServerGarbageCollection>
+	<UserSecretsId>14bbecdc-6669-4a7b-85a2-757a2a369f56</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\.editorConfig" Link=".editorConfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

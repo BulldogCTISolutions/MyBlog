@@ -6,3 +6,5 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage( "CodeQuality", "IDE0052:Remove unread private members", Justification = "<Pending>", Scope = "member", Target = "~F:BlazorServer.Pages.ErrorModel._logger" )]
+[assembly: SuppressMessage( "CodeQuality", "S1125:Remove the unnecessary boolean literal(s)", Justification = "<Pending>", Scope = "module" )]
+[assembly: SuppressMessage( "Maintainability", "CA1506:Avoid excessive class coupling", Justification = "<Pending>", Scope = "member", Target = "~M:BlazorServer.Program.Main(System.String[])" )]

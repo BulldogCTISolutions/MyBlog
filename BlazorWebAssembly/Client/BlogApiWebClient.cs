@@ -12,10 +12,7 @@ public sealed class BlogApiWebClient : IBlogApi
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public BlogApiWebClient( IHttpClientFactory httpClientFactory )
-    {
-        this._httpClientFactory = httpClientFactory;
-    }
+    public BlogApiWebClient( IHttpClientFactory httpClientFactory ) => this._httpClientFactory = httpClientFactory;
 
     //  Blog Post API
 

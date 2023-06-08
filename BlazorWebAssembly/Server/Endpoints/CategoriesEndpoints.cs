@@ -3,7 +3,6 @@ using Data.Models.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace BlazorWebAssembly.Server.Endpoints;
 
 public static class CategoriesEndpoints
