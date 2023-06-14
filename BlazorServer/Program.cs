@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using Auth0.AspNetCore.Authentication;
 
 using Components.RazorComponents;
@@ -7,6 +9,7 @@ using Data.Models.Interfaces;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace BlazorServer;
 
@@ -16,25 +19,16 @@ public static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 
-        ////	Accept only HTTP/3 connections
-        // _ = builder.WebHost.ConfigureKestrel( ( WebHostBuilderContext context, KestrelServerOptions options ) =>
-        // options.Listen( IPAddress.Any, 7192, listenOptions =>
-        // {
-        // // Use HTTP/3
-        // listenOptions.Protocols = HttpProtocols.Http3;
-        // _ = listenOptions.UseHttps();
-        // } ) );
-
         // Add Configuration stack
         // Add keys and secrets to builder configuration
         _ = builder.Configuration
                    .SetBasePath( AppDomain.CurrentDomain.BaseDirectory )
                    .AddEnvironmentVariables()
-                   .AddJsonFile( "appSettings.json" )
-                    // Passing “false” as the second variable for UserSecrets
-                    // That’s because in .NET 6, User Secrets were made “required” by default
-                    // and by passing true, we make them optional. 
-                    .AddUserSecrets( System.Reflection.Assembly.GetExecutingAssembly(), false )
+                   //.AddJsonFile( "appSettings.json" )
+                   // Passing “false” as the second variable for UserSecrets
+                   // That’s because in .NET 6, User Secrets were made “required” by default
+                   // and by passing true, we make them optional. 
+                   .AddUserSecrets( Assembly.GetExecutingAssembly().GetCustomAttribute<UserSecretsIdAttribute>()!.UserSecretsId, false )
                    .Build();
 
         // Add API for Data
@@ -49,13 +43,11 @@ public static class Program
                        options.TagsFolder = @"Tags";
                    } );
 
-        _ = builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
-
         // Add Authentication
         _ = builder.Services
                    .AddAuth0WebAppAuthentication( options =>
                    {
-                       options.Domain = builder.Configuration.GetValue( "Auth0:Authority", string.Empty );
+                       options.Domain = builder.Configuration.GetValue( "Auth0:Domain", string.Empty );
                        options.ClientId = builder.Configuration.GetValue( "Auth0:ClientId", string.Empty );
                        options.ClientSecret = builder.Configuration.GetValue( "Auth0:ClientSecret", string.Empty );
                    } );
@@ -63,6 +55,8 @@ public static class Program
         // Add services to the container.
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
+
+        _ = builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
         _ = builder.Services.AddTransient<ILoginStatus, LoginStatus>();
 
         WebApplication app = builder.Build();
