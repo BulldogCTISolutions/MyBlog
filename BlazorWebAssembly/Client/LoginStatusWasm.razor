@@ -1,0 +1,20 @@
+@implements ILoginStatus
+
+@inject NavigationManager Navigation
+
+<AuthorizeView>
+    <Authorized>
+        <a href="#" @onclick="BeginSignOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    private void BeginSignOut( MouseEventArgs args )
+    {
+        Navigation.NavigateToLogout( "authentication/logout" );
+    }
+}
