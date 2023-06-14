@@ -7,12 +7,12 @@
 <RemoteAuthenticatorView Action="@Action">
     <LogOut>
         @{
-            //string authority = Configuration["Auth0:Authority"] ?? string.Empty;
-            //string clientId = Configuration["Auth0:ClientId"] ?? string.Empty;
-            string authority = Configuration.GetValue<string>( "Auth0:Authority" ) ?? string.Empty;
-            string clientId = Configuration.GetValue<string>( "Auth0:ClientId" ) ?? string.Empty;
+            string domain = Configuration["Auth0:Domain"] ?? string.Empty;
+            string clientId = Configuration["Auth0:ClientId"] ?? string.Empty;
+            //string domain = Configuration.GetValue<string>( "Auth0:Domain" ) ?? string.Empty;
+            //string clientId = Configuration.GetValue<string>( "Auth0:ClientId" ) ?? string.Empty;
 
-            Navigation.NavigateTo( $"{authority}/v2/logout?client_id={clientId}" );
+            Navigation.NavigateTo( $"{domain}/v2/logout?client_id={clientId}" );
         }
     </LogOut>
 </RemoteAuthenticatorView>

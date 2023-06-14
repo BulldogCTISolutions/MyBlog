@@ -45,7 +45,7 @@ public static class Program
         {
             builder.Configuration.Bind( "Auth0", options.ProviderOptions );
             options.ProviderOptions.ResponseType = "code";
-            //options.ProviderOptions.AdditionalProviderParameters.Add( "audience", builder.Configuration["Auth0:Audience"] );
+            options.ProviderOptions.AdditionalProviderParameters.Add( "audience", builder.Configuration["Auth0:Audience"] );
         } );
 
         _ = builder.Services.AddTransient<IBlogApi, BlogApiWebClient>();
