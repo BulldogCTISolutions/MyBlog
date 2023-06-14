@@ -28,5 +28,9 @@
     <ProjectReference Include="..\Common\BlazorWebAssembly.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 
 </Project>
