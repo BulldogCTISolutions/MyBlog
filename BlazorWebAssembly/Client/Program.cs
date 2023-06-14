@@ -28,7 +28,7 @@ public static class Program
         // Add keys and secrets to builder configuration
         _ = builder.Configuration
                    .SetBasePath( AppDomain.CurrentDomain.BaseDirectory )
-                   //.AddJsonFile( "appSettings.json" )
+                   .AddJsonFile( "appSettings.json" )
                    // Passing “false” as the second variable for UserSecrets
                    // That’s because in .NET 6, User Secrets were made “required” by default
                    // and by passing true, we make them optional. 
