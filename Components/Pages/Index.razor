@@ -2,12 +2,17 @@
 
 @using Data.Models.Models
 @using Data.Models.Interfaces
+@using Markdig
 
 @inject IBlogApi _api
 
 <ul>
     <Virtualize ItemsProvider="LoadPosts" Context="p">
-        <li><a href="/Post/@p.Id">@p.Title</a></li>
+        <article>
+            <h2>@p.Title</h2>
+            @((MarkupString)Markdig.Markdown.ToHtml( new string( p.Text.Take( 100 ).ToArray() ), this._pipeline ))
+            <a href="/Post/@p.Id">Read more</a>
+        </article>
     </Virtualize>
 </ul>
 
@@ -16,15 +21,23 @@
 {
     public int totalNumberOfBlogPosts { get; set; }
 
+    private MarkdownPipeline _pipeline;
+
+    protected override Task OnInitializedAsync()
+    {
+        this._pipeline = new MarkdownPipelineBuilder().UseEmojiAndSmiley().Build();
+        return base.OnInitializedAsync();
+    }
+
     private async ValueTask<ItemsProviderResult<BlogPost>> LoadPosts( ItemsProviderRequest request )
     {
         if( totalNumberOfBlogPosts == 0 )
         {
-            totalNumberOfBlogPosts = await _api.GetBlogPostCountAsync().ConfigureAwait(false);
+            totalNumberOfBlogPosts = await _api.GetBlogPostCountAsync().ConfigureAwait( false );
         }
         int fetchThisManyBlogPosts = Math.Min( request.Count, totalNumberOfBlogPosts - request.StartIndex );
-        List<BlogPost> blogposts = (await _api.GetBlogPostsAsync( fetchThisManyBlogPosts, request.StartIndex )
-                                              .ConfigureAwait(false))!; //Will at least return an empty list
+        List<BlogPost> blogposts = ( await _api.GetBlogPostsAsync( fetchThisManyBlogPosts, request.StartIndex )
+                                              .ConfigureAwait( false ) )!; //Will at least return an empty list
         return new ItemsProviderResult<BlogPost>( blogposts, totalNumberOfBlogPosts );
     }
 }

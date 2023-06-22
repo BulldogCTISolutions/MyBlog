@@ -1,38 +1,33 @@
-<AuthorizeView Roles="Administrator">
-    <Authorized>
-        Hi admin!
-    </Authorized>
-    <NotAuthorized>
-        You are not an admin =(
-    </NotAuthorized>
-</AuthorizeView>
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Components/Shared/NavMenu</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">MyBlog Admin</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+        <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Admin/Blogposts">
+                <span class="oi oi-signpost" aria-hidden="true"></span> Blog Posts
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Admin/Cateogries">
+                <span class="oi oi-categories" aria-hidden="true"></span> Categories
             </NavLink>
-        </div>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Admin/Tags">
+                <span class="oi oi-tags" aria-hidden="true"></span> Tags
+            </NavLink>
+        </li>
     </nav>
 </div>
 
