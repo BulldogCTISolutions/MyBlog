@@ -14,7 +14,7 @@
     <button class="btn btn-success" type="submit">Save</button>
 </EditForm>
 
-<ItemList Items="Items" DeleteEvent="@Delete" SelectEvent="@Select" ItemType="Tag">
+<ItemList Items="Items" DeleteEvent="@Delete" SelectEvent="@Select" TItemType="Tag">
     <ItemTemplate>
         @{
             var item = context as Tag;
