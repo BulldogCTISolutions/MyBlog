@@ -49,15 +49,7 @@ public partial class BlogPostEdit
         base.OnParametersSet();
     }
 
-    protected void UpdateHTML()
-    {
-        this.markDownAsHTML = Markdig.Markdown.ToHtml( this.Post.Text, this._pipeline );
-    }
-
-    private bool hasTag( Tag tag )
-    {
-        return this.Post.Tags.Contains( tag );
-    }
+    protected void UpdateHTML() => this.markDownAsHTML = Markdown.ToHtml( this.Post.Text, this._pipeline );
 
     private async Task SavePost()
     {
