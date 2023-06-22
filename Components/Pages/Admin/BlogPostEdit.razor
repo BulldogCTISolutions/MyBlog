@@ -3,9 +3,6 @@
 
 @attribute [Authorize]
 
-@using Components.RazorComponents
-@using Markdig
-
 @inject IBlogApi _api
 @inject NavigationManager _manager
 
@@ -47,68 +44,4 @@
 
 @((MarkupString)markDownAsHTML)
 
-@code
-{
-    [Parameter]
-    public string? Id { get; set; }
 
-    private BlogPost Post { get; set; } = new BlogPost();
-    private List<Category> Categories { get; set; } = new List<Category>();
-    private List<Tag> Tags { get; set; } = new List<Tag>();
-    private string? selectedCategory = null;
-    private string markDownAsHTML { get; set; } = string.Empty;
-    private BlogNavigationLock? NavigationLock { get; set; }
-
-    private MarkdownPipeline _pipeline = default!;
-
-    protected override Task OnInitializedAsync()
-    {
-        this._pipeline = new MarkdownPipelineBuilder().UseEmojiAndSmiley().Build();
-        return base.OnInitializedAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if( Id is not null )
-        {
-            var p = await _api.GetBlogPostAsync( Id ).ConfigureAwait( false );
-            if( p is not null )
-            {
-                Post = p;
-                if( Post.Category is not null )
-                {
-                    selectedCategory = Post.Category.Id;
-                }
-                UpdateHTML();
-            }
-        }
-        Categories = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new List<Category>();
-        Tags = ( await _api.GetTagsAsync().ConfigureAwait( false ) ) ?? new List<Tag>();
-        base.OnParametersSet();
-    }
-
-    protected void UpdateHTML()
-    {
-        markDownAsHTML = Markdig.Markdown.ToHtml( Post.Text, this._pipeline );
-    }
-
-    private bool hasTag( Tag tag )
-    {
-        return Post.Tags.Contains( tag );
-    }
-
-    private async Task SavePost()
-    {
-        if( ( string.IsNullOrEmpty( selectedCategory ) == false ) && ( Categories is not null ) )
-        {
-            Category? category = Categories.FirstOrDefault( c => c.Id == selectedCategory );
-            if( category is not null )
-            {
-                Post.Category = category;
-            }
-        }
-        await _api.SaveBlogPostAsync( Post ).ConfigureAwait( false );
-        NavigationLock?.CurrentEditContext.MarkAsUnmodified();
-        _manager.NavigateTo( "/admin/blogposts" );
-    }
-}

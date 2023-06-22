@@ -2,8 +2,6 @@
 
 @attribute [Authorize]
 
-@using Components.RazorComponents
-
 @inject IBlogApi _api
 
 <h3>Categories</h3>
@@ -28,48 +26,4 @@
     </ItemTemplate>
 </ItemList>
 
-@code
-{
-    private List<Category> Items { get; set; } = new List<Category>();
-    public Category Item { get; set; } = new Category();
 
-    protected async override Task OnInitializedAsync()
-    {
-        Items = ( await _api.GetCategoriesAsync().ConfigureAwait( false ) ) ?? new List<Category>();
-        await base.OnInitializedAsync();
-    }
-
-    private async Task Delete( Category category )
-    {
-        try
-        {
-            await _api.DeleteCategoryAsync( category.Id! ).ConfigureAwait( false );
-            Items.Remove( category );
-        }
-        catch { }
-    }
-
-    private async Task Save()
-    {
-        try
-        {
-            await _api.SaveCategoryAsync( Item ).ConfigureAwait( false );
-            if( Items.Contains( Item ) == false )
-            {
-                Items.Add( Item );
-            }
-            Item = new Category();
-        }
-        catch { }
-    }
-
-    private Task Select( Category category )
-    {
-        try
-        {
-            Item = category;
-        }
-        catch { }
-        return Task.CompletedTask;
-    }
-}

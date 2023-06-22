@@ -2,8 +2,6 @@
 
 @attribute [Authorize]
 
-@using Components.RazorComponents
-
 @inject IBlogApi _api
 
 <h3>Tags</h3>
@@ -28,48 +26,4 @@
     </ItemTemplate>
 </ItemList>
 
-@code
-{
-    private List<Tag> Items { get; set; } = new List<Tag>();
-    public Tag Item { get; set; } = new Tag();
 
-    protected async override Task OnInitializedAsync()
-    {
-        Items = ( await _api.GetTagsAsync().ConfigureAwait( false ) ) ?? new List<Tag>();
-        await base.OnInitializedAsync();
-    }
-
-    private async Task Delete( Tag tag )
-    {
-        try
-        {
-            await _api.DeleteTagAsync( tag.Id! ).ConfigureAwait( false );
-            Items.Remove( tag );
-        }
-        catch { }
-    }
-
-    private async Task Save()
-    {
-        try
-        {
-            await _api.SaveTagAsync( Item ).ConfigureAwait( false );
-            if( Items.Contains( Item ) == false )
-            {
-                Items.Add( Item );
-            }
-            Item = new Tag();
-        }
-        catch { }
-    }
-
-    private Task Select( Tag tag )
-    {
-        try
-        {
-            Item = tag;
-        }
-        catch { }
-        return Task.CompletedTask;
-    }
-}

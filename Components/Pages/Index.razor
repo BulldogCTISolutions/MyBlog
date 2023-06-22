@@ -21,7 +21,7 @@
 {
     public int totalNumberOfBlogPosts { get; set; }
 
-    private MarkdownPipeline _pipeline;
+    private MarkdownPipeline _pipeline = default!;
 
     protected override Task OnInitializedAsync()
     {

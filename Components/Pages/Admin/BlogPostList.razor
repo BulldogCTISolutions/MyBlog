@@ -16,18 +16,4 @@
     </Virtualize>
 </ul>
 
-@code
-{
-    public int TotalBlogposts { get; set; }
 
-    private async ValueTask<ItemsProviderResult<BlogPost>> LoadPosts( ItemsProviderRequest request )
-    {
-        if( TotalBlogposts == 0 )
-        {
-            TotalBlogposts = await _api.GetBlogPostCountAsync();
-        }
-        var numblogposts = Math.Min( request.Count, TotalBlogposts - request.StartIndex );
-        List<BlogPost> posts = ( await _api.GetBlogPostsAsync( numblogposts, request.StartIndex ) ) ?? new List<BlogPost>();
-        return new ItemsProviderResult<BlogPost>( posts, TotalBlogposts );
-    }
-}
