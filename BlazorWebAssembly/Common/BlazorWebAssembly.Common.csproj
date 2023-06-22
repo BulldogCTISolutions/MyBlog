@@ -9,7 +9,7 @@
 	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	<AnalysisLevel>latest</AnalysisLevel>
+	<AnalysisLevel>latest-all</AnalysisLevel>
 	<ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 

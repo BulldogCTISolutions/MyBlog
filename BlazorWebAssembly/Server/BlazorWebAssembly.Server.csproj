@@ -9,7 +9,7 @@
 	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	<AnalysisLevel>latest</AnalysisLevel>
+	<AnalysisLevel>latest-all</AnalysisLevel>
 	<ServerGarbageCollection>true</ServerGarbageCollection>
     <UserSecretsId>13426051-9b24-4e5c-aae6-89677ea0cbdf</UserSecretsId>
   </PropertyGroup>
@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.8" />
   </ItemGroup>
 
   <ItemGroup>

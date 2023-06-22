@@ -9,7 +9,7 @@
 	<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-	<AnalysisLevel>latest</AnalysisLevel>
+	<AnalysisLevel>latest-all</AnalysisLevel>
 	<ServerGarbageCollection>true</ServerGarbageCollection>
 	<UserSecretsId>14bbecdc-6669-4a7b-85a2-757a2a369f56</UserSecretsId>
   </PropertyGroup>
