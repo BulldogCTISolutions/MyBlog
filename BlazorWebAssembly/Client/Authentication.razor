@@ -1,18 +1,16 @@
 @page "/authentication/{action}"
 
-@inject NavigationManager Navigation
+@inject NavigationManager _navigation
 
-@inject IConfiguration Configuration
+@inject IConfiguration _configuration
 
 <RemoteAuthenticatorView Action="@Action">
     <LogOut>
         @{
-            //string domain = Configuration["Auth0:Domain"] ?? string.Empty;
-            //string clientId = Configuration["Auth0:ClientId"] ?? string.Empty;
-            string domain = Configuration.GetValue<string>( "Auth0:Domain" ) ?? string.Empty;
-            string clientId = Configuration.GetValue<string>( "Auth0:ClientId" ) ?? string.Empty;
+            string domain = this._configuration.GetValue<string>( "Auth0:Domain" ) ?? string.Empty;
+            string clientId = this._configuration.GetValue<string>( "Auth0:ClientId" ) ?? string.Empty;
 
-            Navigation.NavigateTo( $"{domain}/v2/logout?client_id={clientId}" );
+            this._navigation.NavigateTo( $"{domain}/v2/logout?client_id={clientId}" );
         }
     </LogOut>
 </RemoteAuthenticatorView>

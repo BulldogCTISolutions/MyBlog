@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ImplicitUsings>enable</ImplicitUsings>
 	<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
 	<NoWarn>1036,1701;1702;9057;</NoWarn>
@@ -36,10 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Components\Components.csproj" />
     <ProjectReference Include="..\Common\BlazorWebAssembly.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<RuntimeHostConfigurationOption Include="System.Net.SocketsHttpHandler.Http3Support" Value="true" />
   </ItemGroup>
 
   <ItemGroup>

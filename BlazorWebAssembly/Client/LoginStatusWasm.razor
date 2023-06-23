@@ -1,6 +1,6 @@
 @implements ILoginStatus
 
-@inject NavigationManager Navigation
+@inject NavigationManager _navigation
 
 <AuthorizeView>
     <Authorized>
@@ -15,6 +15,6 @@
 {
     private void BeginSignOut( MouseEventArgs args )
     {
-        Navigation.NavigateToLogout( "authentication/logout" );
+        this._navigation.NavigateToLogout( "authentication/logout" );
     }
 }
