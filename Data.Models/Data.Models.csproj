@@ -17,4 +17,11 @@
 	<None Include="..\..\.editorConfig" Link=".editorConfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="IDisposableAnalyzers" Version="4.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

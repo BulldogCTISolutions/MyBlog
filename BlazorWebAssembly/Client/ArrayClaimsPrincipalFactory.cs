@@ -27,8 +27,8 @@ public class ArrayClaimsPrincipalFactory<TAccount> : AccountClaimsPrincipalFacto
                 {
                     claimsIdentity?.RemoveClaim( claimsIdentity.FindFirst( key ) );
 
-                    IEnumerable<Claim>? claims = element.EnumerateArray()
-                        .Select( x => new Claim( key, x.ToString() ) );
+                    using JsonElement.ArrayEnumerator arrayEnumerator = element.EnumerateArray();
+                    IEnumerable<Claim>? claims = arrayEnumerator.Select( x => new Claim( key, x.ToString() ) );
 
                     claimsIdentity?.AddClaims( claims );
                 }

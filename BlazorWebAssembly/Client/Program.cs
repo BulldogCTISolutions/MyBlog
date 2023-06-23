@@ -1,6 +1,6 @@
 using System.Reflection;
 
-using Components.RazorComponents;
+using Components.Interfaces;
 
 using Data.Models.Interfaces;
 

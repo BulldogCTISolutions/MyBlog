@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage( "CodeQuality", "IDE0052:Remove unread private members", Justification = "<Pending>", Scope = "member", Target = "~F:BlazorWebAssembly.Server.Pages.ErrorModel._logger" )]
+[assembly: SuppressMessage( "IDisposableAnalyzers.Correctness", "IDISP014:Use a single instance of HttpClient", Justification = "It's being injected as a service", Scope = "member", Target = "~M:BlazorWebAssembly.Client.Program.Main(System.String[])~System.Threading.Tasks.Task" )]

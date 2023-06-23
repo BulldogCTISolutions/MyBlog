@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+
+using System.Net.Http.Json;
 using System.Text.Json;
 
 using Data.Models.Interfaces;
@@ -19,20 +20,20 @@ public sealed class BlogApiWebClient : IBlogApi
     #region Blog Post API
     public async Task<List<BlogPost>?> GetBlogPostsAsync( int numberOfPosts, int startIndex )
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<List<BlogPost>>( $"/api/BlogPosts?numberOfPosts={numberOfPosts}&startIndex={startIndex}" )
                                .ConfigureAwait( false );
     }
 
     public async Task<BlogPost?> GetBlogPostAsync( string id )
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<BlogPost>( $"/api/BlogPosts/{id}" ).ConfigureAwait( false );
     }
 
     public async Task<int> GetBlogPostCountAsync()
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<int>( $"/api/BlogPostCount" ).ConfigureAwait( false );
     }
 
@@ -40,9 +41,9 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
-            HttpResponseMessage? response = await httpClient.PutAsJsonAsync<BlogPost>( $"/api/BlogPosts", item )
-                                                            .ConfigureAwait( false );
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpResponseMessage? response = await httpClient.PutAsJsonAsync( $"/api/BlogPosts", item )
+                                                                  .ConfigureAwait( false );
             string? json = await response.Content.ReadAsStringAsync().ConfigureAwait( false );
             return JsonSerializer.Deserialize<BlogPost>( json );
         }
@@ -57,9 +58,9 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
             Uri uri = new Uri( $"/api/BlogPosts/{id}" );
-            _ = await httpClient.DeleteAsync( uri ).ConfigureAwait( false );
+            using HttpResponseMessage httpResponseMessage = await httpClient!.DeleteAsync( uri ).ConfigureAwait( false );
         }
         catch( AccessTokenNotAvailableException ex )
         {
@@ -74,14 +75,14 @@ public sealed class BlogApiWebClient : IBlogApi
     #region Category API
     public async Task<List<Category>?> GetCategoriesAsync()
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<List<Category>>( $"/api/Categories" )
                                .ConfigureAwait( false );
     }
 
     public async Task<Category?> GetCategoryAsync( string id )
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<Category>( $"/api/Categories/{id}" ).ConfigureAwait( false );
     }
 
@@ -89,8 +90,8 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
-            HttpResponseMessage? response = await httpClient.PutAsJsonAsync<Category>( $"/api/Categories", item )
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpResponseMessage? response = await httpClient.PutAsJsonAsync( $"/api/Categories", item )
                                                             .ConfigureAwait( false );
             string? json = await response.Content.ReadAsStringAsync().ConfigureAwait( false );
             return JsonSerializer.Deserialize<Category>( json );
@@ -106,9 +107,9 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
             Uri uri = new Uri( $"/api/Categories/{id}" );
-            _ = await httpClient.DeleteAsync( uri ).ConfigureAwait( false );
+            using HttpResponseMessage httpResponseMessage = await httpClient.DeleteAsync( uri ).ConfigureAwait( false );
         }
         catch( AccessTokenNotAvailableException ex )
         {
@@ -122,14 +123,14 @@ public sealed class BlogApiWebClient : IBlogApi
     #region Tag API
     public async Task<List<Tag>?> GetTagsAsync()
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<List<Tag>>( $"/api/Tags" )
                                .ConfigureAwait( false );
     }
 
     public async Task<Tag?> GetTagAsync( string id )
     {
-        HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
+        using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Public" );
         return await httpClient.GetFromJsonAsync<Tag>( $"/api/Tags/{id}" ).ConfigureAwait( false );
     }
 
@@ -137,8 +138,8 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
-            HttpResponseMessage? response = await httpClient.PutAsJsonAsync<Tag>( $"/api/Categories", item )
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpResponseMessage? response = await httpClient.PutAsJsonAsync( $"/api/Categories", item )
                                                             .ConfigureAwait( false );
             string? json = await response.Content.ReadAsStringAsync().ConfigureAwait( false );
             return JsonSerializer.Deserialize<Tag>( json );
@@ -154,9 +155,9 @@ public sealed class BlogApiWebClient : IBlogApi
     {
         try
         {
-            HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
+            using HttpClient? httpClient = this._httpClientFactory.CreateClient( "Authenticated" );
             Uri uri = new Uri( $"/api/Tags/{id}" );
-            _ = await httpClient.DeleteAsync( uri ).ConfigureAwait( false );
+            using HttpResponseMessage httpResponseMessage = await httpClient.DeleteAsync( uri ).ConfigureAwait( false );
         }
         catch( AccessTokenNotAvailableException ex )
         {

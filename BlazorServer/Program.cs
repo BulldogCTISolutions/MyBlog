@@ -2,6 +2,7 @@ using System.Reflection;
 
 using Auth0.AspNetCore.Authentication;
 
+using Components.Interfaces;
 using Components.RazorComponents;
 
 using Data;
