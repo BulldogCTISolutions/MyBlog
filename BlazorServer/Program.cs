@@ -2,6 +2,8 @@ using System.Reflection;
 
 using Auth0.AspNetCore.Authentication;
 
+using BlazorServer.Services;
+
 using Components.Interfaces;
 using Components.RazorComponents;
 
@@ -57,8 +59,10 @@ public static class Program
         _ = builder.Services.AddRazorPages();
         _ = builder.Services.AddServerSideBlazor();
 
+        _ = builder.Services.AddScoped<IBrowserStorage, BlogProtectedBrowserStorage>();
         _ = builder.Services.AddScoped<IBlogApi, BlogApiJsonDirectAccess>();
         _ = builder.Services.AddTransient<ILoginStatus, LoginStatus>();
+        _ = builder.Services.AddSingleton<IBlogNotificationService, BlazorServerBlogNotificationService>();
 
         WebApplication app = builder.Build();
 

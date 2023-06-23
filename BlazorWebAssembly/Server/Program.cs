@@ -1,6 +1,7 @@
 using System.Reflection;
 
 using BlazorWebAssembly.Server.Endpoints;
+using BlazorWebAssembly.Server.Hubs;
 
 using Data;
 using Data.Models.Interfaces;
@@ -58,6 +59,8 @@ public static class Program
                             } );
         _ = builder.Services.AddAuthorization();
 
+        _ = builder.Services.AddSignalR();
+
         WebApplication app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -87,6 +90,7 @@ public static class Program
 
         _ = app.MapRazorPages();
         _ = app.MapControllers();
+        _ = app.MapHub<BlobNotificationHub>( "/BlogNotificationHub" );
         _ = app.MapFallbackToFile( "index.html" );
 
         app.Run();

@@ -19,12 +19,26 @@ public partial class BlogPostEdit
     private string? selectedCategory;
     private string markDownAsHTML { get; set; } = string.Empty;
     private BlogNavigationLock? NavigationLock { get; set; }
-
     private MarkdownPipeline _pipeline = default!;
+
     protected override Task OnInitializedAsync()
     {
         this._pipeline = new MarkdownPipelineBuilder().UseEmojiAndSmiley().Build();
         return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync( bool firstRender )
+    {
+        if( firstRender && string.IsNullOrEmpty( this.Id ) )
+        {
+            BlogPost? saved = await this._storage.GetAsync<BlogPost>( "EditCurrentPost" ).ConfigureAwait( false );
+            if( saved is not null )
+            {
+                this.Post = saved;
+                _ = this.InvokeAsync( () => this.StateHasChanged() );
+            }
+        }
+        await base.OnAfterRenderAsync( firstRender ).ConfigureAwait( false );
     }
 
     protected override async Task OnParametersSetAsync()
@@ -40,7 +54,7 @@ public partial class BlogPostEdit
                     this.selectedCategory = this.Post.Category.Id;
                 }
 
-                this.UpdateHTML();
+                await this.UpdateHTMLAsync().ConfigureAwait( false );
             }
         }
 
@@ -49,7 +63,18 @@ public partial class BlogPostEdit
         base.OnParametersSet();
     }
 
-    protected void UpdateHTML() => this.markDownAsHTML = Markdown.ToHtml( this.Post.Text, this._pipeline );
+    protected async Task UpdateHTMLAsync()
+    {
+        if( string.IsNullOrEmpty( this.Post.Text ) == false )
+        {
+            await this._notificationService.SendNotification( this.Post ).ConfigureAwait( false );
+            this.markDownAsHTML = Markdown.ToHtml( this.Post.Text, this._pipeline );
+            if( string.IsNullOrEmpty( this.Post.Id ) )
+            {
+                await this._storage.SetAsync( "EditCurrentPost", this.Post ).ConfigureAwait( false );
+            }
+        }
+    }
 
     private async Task SavePost()
     {

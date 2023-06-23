@@ -4,6 +4,8 @@
 @attribute [Authorize]
 
 @inject IBlogApi _api
+@inject IBlogNotificationService _notificationService
+@inject IBrowserStorage _storage
 @inject NavigationManager _manager
 
 <EditForm Model="Post" OnValidSubmit="SavePost">
@@ -37,7 +39,7 @@
             </li>
         }
     </ul>
-    <InputTextAreaOnInput @bind-Value="Post.Text" @onkeyup="UpdateHTML" />
+    <InputTextAreaOnInput @bind-Value="Post.Text" @onkeyup="UpdateHTMLAsync" />
     <ValidationMessage For="()=>Post.Text" />
     <button type="submit" class="btn btn-success">Save</button>
 </EditForm>

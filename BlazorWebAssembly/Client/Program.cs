@@ -1,5 +1,9 @@
 using System.Reflection;
 
+using Blazored.SessionStorage;
+
+using BlazorWebAssembly.Client.Services;
+
 using Components.Interfaces;
 
 using Data.Models.Interfaces;
@@ -45,11 +49,15 @@ public static class Program
         {
             builder.Configuration.Bind( "Auth0", options.ProviderOptions );
             options.ProviderOptions.ResponseType = "code";
-            options.ProviderOptions.AdditionalProviderParameters.Add( "audience", builder.Configuration["Auth0:Audience"] );
+            options.ProviderOptions.AdditionalProviderParameters.Add( "audience", builder.Configuration.GetValue<string>( "Auth0:Audience" ) );
         } ).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
+
+        _ = builder.Services.AddBlazoredSessionStorage();
 
         _ = builder.Services.AddTransient<IBlogApi, BlogApiWebClient>();
         _ = builder.Services.AddTransient<ILoginStatus, LoginStatusWasm>();
+        _ = builder.Services.AddScoped<IBrowserStorage, BlogBrowserStorage>();
+        _ = builder.Services.AddSingleton<IBlogNotificationService, BlazorWebAssemblyBlogNotificationService>();
 
         await builder.Build().RunAsync().ConfigureAwait( false );
     }
