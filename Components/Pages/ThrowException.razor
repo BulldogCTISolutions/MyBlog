@@ -1,0 +1,5 @@
+@page "/ThrowException"
+
+<button @onclick="@( () => {throw new Exception("something is broken"); } )">
+    Throw an exception
+</button>
