@@ -1,0 +1,34 @@
+
+@inherits TestContext
+
+<h3>AuthTest</h3>
+
+@code
+{
+    [Fact( DisplayName = "Checks if Log In is showed" )]
+    public void ShouldShowLogin()
+    {
+        //  Arrange
+        this.AddTestAuthorization();
+
+        // Act
+        var cut = Render(@<LoginStatus />);
+
+        // Assert that there is a link with the text "Log In"
+        Assert.Equal( "Log in", cut.Find("a").InnerHtml );
+    }
+
+    [Fact( DisplayName = "Checks if Log out is showed" )]
+    public void ShouldShowLogout()
+    {
+        //  Arrange
+        var authContext = this.AddTestAuthorization();
+        authContext.SetAuthorized("TestUser", AuthorizationState.Authorized);
+
+        // Act
+        var cut = Render(@<LoginStatus />);
+
+        // Assert that there is a link with the text "Log In"
+        Assert.Equal( "Log out", cut.Find( "a" ).InnerHtml );
+    }
+}
